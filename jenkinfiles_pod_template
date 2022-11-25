@@ -1,0 +1,33 @@
+podTemplate(containers: [
+    containerTemplate(
+        name: 'maven', 
+        image: 'maven:3.8.1-jdk-8', 
+        command: 'sleep', 
+        args: '30d'
+        ),
+    containerTemplate(
+        name: 'python', 
+        image: 'python:3.9-slim', 
+        command: 'sleep', 
+        args: '30d')
+  ]) 
+ 
+{
+
+    node(POD_LABEL) {
+
+        stage('Get a Python Project') {
+            git url: 'https://github.com/LeeRoger/jenkinsLearn', branch: 'main'
+            container('python') {
+                stage('test python') {
+                    sh '''
+                    echo "Go Build"
+					python --version
+					exit
+                    '''
+                }
+            }
+        }
+
+    }
+}
